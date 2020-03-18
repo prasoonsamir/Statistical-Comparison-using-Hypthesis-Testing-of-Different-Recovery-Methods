@@ -1,0 +1,25 @@
+import numpy as np
+import pandas as pd
+import statsmodels
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.tsa.stattools import adfuller
+import matplotlib.pyplot as plt
+from scipy.stats import shapiro
+import scipy.stats as stats
+import warnings
+df1 = pd.read_csv("C:\\Users\\Samir Prasun\\Desktop\\production forecasting\\Recovery comparison\\Clearfork.csv")
+df = pd.read_csv("C:\\Users\\Samir Prasun\\Desktop\\production forecasting\\Recovery comparison\\San Andreas.csv")
+
+df['log_PUR'] = np.log10(df['PUR'])
+df['log_WUR'] = np.log10(df['WUR'])
+df['log_IUR'] = np.log10(df['IUR'])
+stat, p = shapiro(df.log_IUR)
+print('Statistics=%.3f, p=%.3f' % (stat, p))
+# interpret
+alpha = 0.02
+if p > alpha:
+	print('Sample looks Gaussian (fail to reject H0)')
+else:
+	print('Sample does not look Gaussian (reject H0)')
+stats.f_oneway(df.log_PUR, df.log_WUR, df.log_IUR)
